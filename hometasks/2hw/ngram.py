@@ -79,7 +79,7 @@ class LanguageModel(object):
 
         # ... and do the same with {n-1}-grams, which are contexts for n-grams
         # TODO: Task 1
-        for i in range(l - self.ngram_size):
+        for i in range(l - self.ngram_size + 2):
             ngram = tuple(sentence[i: i + self.ngram_size - 1])
             val = self.context_counter.get(ngram, 0) + 1
             self.context_counter.update([(ngram, val)])
@@ -103,7 +103,8 @@ class LanguageModel(object):
             return 0
 
         # return ((ngram_count) / (context_count)) * (context_count / V)
-        return ngram_count / (context_count + V)
+        # return ngram_count / (context_count + V)
+        return ((ngram_count) / (context_count)) * (context_count / sum(self.context_counter.values()))
 
     def sentence_logprob(self, sentence):
         """
